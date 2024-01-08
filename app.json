@@ -1,13 +1,14 @@
 {
   "expo": {
-    "name": "APK_cloud2",
-    "slug": "APK_cloud2",
+    "name": "Sera Vaika",
+    "slug": "sera-vaika",
+    "description": "C'est une application mobile de vente de voiture d'occasion",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/_fc6c0dd5-354c-438b-a68f-57bfc2cdf59c.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/LaunchImage-1242@3x~iphone6s-portrait_1242x2208.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,12 +20,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/_fc6c0dd5-354c-438b-a68f-57bfc2cdf59c.jpg",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.valisoa.seravaika"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/_fc6c0dd5-354c-438b-a68f-57bfc2cdf59c.jpg"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "23a36cf9-439a-4a81-b76c-ea866237217f"
+      }
     }
   }
 }
