@@ -1,16 +1,23 @@
 // In App.js in a new project
 
 import * as React from "react";
-import { View, Text, StatusBar, Switch, SafeAreaView, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StatusBar,
+  Switch,
+  SafeAreaView,
+  StyleSheet,
+  Pressable,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Login } from "./screens/Login";
 import { Signup } from "./screens/Signup";
 import { MotiView } from "moti";
-
+import { HomeScreen } from "./screens/HomeScreen";
 
 export const FadeIn = ({ navigation }) => {
-
   return (
     <MotiView
       from={{
@@ -22,14 +29,14 @@ export const FadeIn = ({ navigation }) => {
         scale: 1,
       }}
       transition={{
-        type: 'timing',
+        type: "timing",
       }}
       style={styles.shape}
     />
   );
-}
+};
 
-export  function HelloWorld() {
+export function HelloWorld() {
   const [visible, toggle] = React.useReducer((s) => !s, true);
 
   return (
@@ -39,34 +46,32 @@ export  function HelloWorld() {
   );
 }
 
-function HomeScreen({ navigation }) {
+function Home({ navigation }) {
   return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-neutral-900"
-
+    <SafeAreaView className="flex-1 items-center justify-center bg-neutral-900">
+      <View className="flex-row justify-center items-center space-x-2">
+        <Text className="text-xl text-white">Home </Text>
+      </View>
+      <Text
+        className="mx-4 text-justify text-white mt-4"
+        onPress={() => navigation.navigate("Login")}
       >
-        <View className="flex-row justify-center items-center space-x-2">
-          <Text className="text-xl text-white">Home </Text>
-        </View>
-        <Text
-          className="mx-4 text-justify text-white mt-4"
-          onPress={() => navigation.navigate("Login")}
-        >
-          Login
-        </Text>
-        <Text
-          className="mx-4 text-justify text-white mt-4"
-          onPress={() => navigation.navigate("SignUp")}
-        >
-          Sign Up
-        </Text>
-        <Text
-          className="mx-4 text-justify text-white mt-4"
-          onPress={() => navigation.navigate("FadeIn")}
-        >
-          Fade in
-        </Text>
-        {/* <StatusBar barStyle="light-content"  /> */}
-      </SafeAreaView>
+        Login
+      </Text>
+      <Text
+        className="mx-4 text-justify text-white mt-4"
+        onPress={() => navigation.navigate("SignUp")}
+      >
+        Sign Up
+      </Text>
+      <Text
+        className="mx-4 text-justify text-white mt-4"
+        onPress={() => navigation.navigate("FadeIn")}
+      >
+        Fade in
+      </Text>
+      {/* <StatusBar barStyle="light-content"  /> */}
+    </SafeAreaView>
   );
 }
 
@@ -78,6 +83,12 @@ function App() {
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
+          options={{ headerShown: false }}
+          component={Home}
+        />
+
+        <Stack.Screen
+          name="HomeScreen"
           options={{ headerShown: false }}
           component={HomeScreen}
         />
@@ -102,22 +113,21 @@ function App() {
   );
 }
 
-
 const styles = StyleSheet.create({
   shape: {
-    justifyContent: 'center',
+    justifyContent: "center",
     height: 250,
     width: 250,
     borderRadius: 25,
     marginRight: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    backgroundColor: '#9c1aff',
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    backgroundColor: "#9c1aff",
   },
 });
 

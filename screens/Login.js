@@ -10,6 +10,7 @@ export const Login = ({navigation}) => {
     // Add your login logic here
     console.log('Email:', email);
     console.log('Password:', password);
+    navigation.navigate("HomeScreen");
     // You can add your authentication logic here
   };
 
