@@ -7,11 +7,12 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Image,
 } from "react-native";
 
 export const Signup = ({ navigation }) => {
-  const [nom, setNom] = useState("")
-  const [prenom, setPrenom] = useState("")
+  const [nom, setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [telephone, setTelephone] = useState("");
@@ -25,8 +26,14 @@ export const Signup = ({ navigation }) => {
 
   return (
     <SafeAreaView className="flex-1 items-center bg-neutral-900">
-      <Text className="text-3xl text-white">Inscription </Text>
-      <View className="mt-28">
+      <View className=" mt-16 ">
+        <Image
+          source={require("../assets/415036444_392514570015565_8214189076379889795_n.png")}
+          style={{ width: 200, height: 100, margin: 5 }}
+        />
+        <Text className="text-3xl text-white text-center">Inscription </Text>
+      </View>
+      <View className="">
         {/*
       <Text
       className="mx-4 text-justify text-white mt-4"
@@ -34,7 +41,7 @@ export const Signup = ({ navigation }) => {
       >
       Go Back
     </Text> */}
-    <Text style={styles.label} className="text-white">
+        <Text style={styles.label} className="text-white">
           Nom:
         </Text>
         <TextInput
@@ -44,7 +51,7 @@ export const Signup = ({ navigation }) => {
           placeholder="Entrez votre nom"
           placeholderTextColor="gray"
           className="text-white w-80"
-          autoCapitalize={false}
+          autoCapitalize="none"
         />
         <Text style={styles.label} className="text-white">
           Prénom:
@@ -56,7 +63,7 @@ export const Signup = ({ navigation }) => {
           placeholder="Entrez votre prénom"
           placeholderTextColor="gray"
           className="text-white w-80"
-          autoCapitalize={false}
+          autoCapitalize="none"
         />
         <Text style={styles.label} className="text-white">
           Email:
@@ -68,7 +75,7 @@ export const Signup = ({ navigation }) => {
           placeholder="Entrez votre email"
           placeholderTextColor="gray"
           className="text-white w-80"
-          autoCapitalize={false}
+          autoCapitalize="none"
         />
 
         <Text style={styles.label} className="text-white">

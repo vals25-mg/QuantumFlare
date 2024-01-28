@@ -16,14 +16,18 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.valisoa.seravaika"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/_fc6c0dd5-354c-438b-a68f-57bfc2cdf59c.jpg",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.valisoa.seravaika"
+      "package": "com.valisoa.seravaika",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/_fc6c0dd5-354c-438b-a68f-57bfc2cdf59c.jpg"
@@ -32,6 +36,9 @@
       "eas": {
         "projectId": "23a36cf9-439a-4a81-b76c-ea866237217f"
       }
-    }
+    },
+    "plugins": [
+      "expo-image-picker"
+    ]
   }
 }

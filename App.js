@@ -16,6 +16,8 @@ import { Login } from "./screens/Login";
 import { Signup } from "./screens/Signup";
 import { MotiView } from "moti";
 import { HomeScreen } from "./screens/HomeScreen";
+import { AjoutAnnonce } from "./screens/AjoutAnnonce";
+import { AjoutImage } from "./screens/AjoutImage";
 
 export const FadeIn = ({ navigation }) => {
   return (
@@ -107,6 +109,16 @@ function App() {
           name="FadeIn"
           options={{ headerShown: false }}
           component={HelloWorld}
+        />
+        <Stack.Screen
+          name="AjoutAnnonce"
+          options={{ headerShown: false }}
+          component={AjoutAnnonce}
+        />
+        <Stack.Screen
+          name="AjoutImage"
+          options={{ headerShown: false }}
+          component={AjoutImage}
         />
       </Stack.Navigator>
     </NavigationContainer>

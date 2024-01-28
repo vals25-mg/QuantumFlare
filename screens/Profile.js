@@ -25,8 +25,8 @@ export const Profile = ({ navigation }) => {
 
   return (
     <SafeAreaView className="flex-1  bg-neutral-900">
-      <View style={styles.container}>
-        <View className="items-center">
+      <View style={styles.container} className="mt-12">
+        <View className="items-center ">
           <View style={styles.header}>
             <Icon name="person" size={30} color="#fff" />
             <Text style={styles.title} className="text-white">

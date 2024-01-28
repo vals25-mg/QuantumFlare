@@ -5,6 +5,7 @@ import { ModificationStatus } from "./ModificationStatus";
 import { Profile } from "./Profile";
 import { Notification } from "./Notification";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MyAnnounces from "./MyAnnounces";
 
 const Tab = createBottomTabNavigator();
 
@@ -13,7 +14,7 @@ export const HomeScreen = () => {
     <Tab.Navigator
       initialRouteName="ListeAnnonces"
       screenOptions={{
-        tabBarStyle: { position: "absolute", backgroundColor: "#000" },
+        tabBarStyle: {  backgroundColor: "#000" },
         tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: "#fff",
         // tabBarBackground: "black",
@@ -35,12 +36,12 @@ export const HomeScreen = () => {
         name="Annonce"
         options={{
             headerShown: false,
-            tabBarLabel: "Annonce",
+            tabBarLabel: "Mes Annonces",
             tabBarIcon: ({ color, size }) => (
                 <Icon name="list"  color={color} size={size} />
               ),
           }}
-        component={ModificationStatus}
+        component={MyAnnounces}
       />
       <Tab.Screen
         name="Notification"
