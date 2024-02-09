@@ -8,7 +8,11 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
+import { link } from "../backendconfig";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const Signup = ({ navigation }) => {
   const [nom, setNom] = useState("");
@@ -17,11 +21,36 @@ export const Signup = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [telephone, setTelephone] = useState("");
 
-  const handleLogin = () => {
-    // Add your login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
-    // You can add your authentication logic here
+  const handleSubscribe = async () => {
+    try {
+      // Send the login request to the server
+      const inputs= {
+        "nom" : nom,
+        "prenom" : prenom,
+        "email": email,
+        "mdp": password,
+        "telephone": telephone
+      }
+      const response = await axios.post(`${link}/api/v1/auth/register`, inputs);
+
+      // Assuming the server returns a token in the response
+      const token = response.data.status.body.token;
+
+      console.log('token: '+token)
+      const dataUsers={
+        "email":email,
+        "token":token
+    }
+      // Store the token in AsyncStorage
+      await AsyncStorage.setItem('userToken', JSON.stringify(dataUsers));
+
+      // Navigate to the home screen or perform any other actions after successful login
+      navigation.navigate('HomeScreen');
+    } catch (error) {
+      // Handle login error here
+      console.log('Login error:', error.message);
+      Alert.alert("Inscription Invalide");
+    }
   };
 
   return (
@@ -103,7 +132,7 @@ export const Signup = ({ navigation }) => {
           className="text-white w-80"
         />
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity style={styles.button} onPress={handleSubscribe}>
           <Text style={styles.buttonText}>S'inscrire</Text>
         </TouchableOpacity>
         <Text className="text-white mt-3 text">

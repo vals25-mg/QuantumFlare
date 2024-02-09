@@ -26,7 +26,7 @@ export const Notification = () => {
       <View
         style={styles.notificationItem}
         backgroundColor="#323232"
-        className=" flex-row items-start w-full"
+        className=" flex-row items-start "
       >
         <Icon name="person-circle-outline" size={50} color="#4267B2" />
         <View style={styles.notificationTextContainer}>
@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     marginBottom: 12,
+    width:350
   },
   notificationTextContainer: {
     marginLeft: 20,

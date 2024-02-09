@@ -8,18 +8,48 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  Alert,
 } from "react-native";
+import { link } from "../backendconfig";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    // Add your login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
-    navigation.navigate("HomeScreen");
-    // You can add your authentication logic here
+  const handleLogin = async () => {
+    try {
+      // Send the login request to the server
+      const inputs= {
+        "email": email,
+        "mdp": password
+      }
+      console.log(inputs)
+      const response = await axios.post(`${link}/api/v1/auth/authenticate`, inputs);
+
+      // Assuming the server returns a token in the response
+      const token = response.data.token;
+
+      console.log(token)
+      const dataUsers={
+          "email":email,
+          "token":token
+      }
+      console.log(dataUsers)
+      // Store the token in AsyncStorage
+      await AsyncStorage.removeItem('userToken');
+      await AsyncStorage.setItem('userToken', JSON.stringify(dataUsers));
+      // Navigate to the home screen or perform any other actions after successful login
+
+      navigation.navigate('HomeScreen');
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      // Handle login error here
+      console.log('Login error:', error.message);
+      Alert.alert("Email ou Mot de passe incorrect");
+    }
   };
 
   return (
@@ -32,13 +62,7 @@ export const Login = ({ navigation }) => {
         <Text className="text-3xl text-white text-center">Connexion </Text>
       </View>
       <View className="">
-        {/*
-      <Text
-      className="mx-4 text-justify text-white mt-4"
-      onPress={()=>navigation.navigate("Home")}
-      >
-      Go Back
-    </Text> */}
+
         <Text style={styles.label} className="text-white">
           Email:
         </Text>

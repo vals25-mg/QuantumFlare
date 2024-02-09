@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {
   FlatList,
@@ -12,105 +12,57 @@ import {
 } from "react-native";
 import { Badge } from "@rneui/themed";
 import DetailsAnnonce from "./DetailsAnnonce";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { link } from "../backendconfig";
 
 export const ListeAnnonces = () => {
-  const annonceData = [
-    {
-      id: "1",
-      status:"0",
-      image:
-        "https://images.caradisiac.com/images/4/3/8/8/204388/S0-les-voitures-neuves-sont-de-plus-en-plus-cheres-et-ce-n-est-pas-une-surprise-770216.jpg",
-      prix: 300000000,
-      marque: "Bentley",
-      time: "il y a 2h",
-    },
-    {
-      id: "2",
-      status:"1",
-      image:
-        "https://images.caradisiac.com/images/4/3/8/8/204388/S0-les-voitures-neuves-sont-de-plus-en-plus-cheres-et-ce-n-est-pas-une-surprise-770216.jpg",
-      prix: 300000000,
-      marque: "Wolkswagen, Golf Type 4 moteur essesnce",
-      time: "il y a 4h",
-    },
-    {
-      id: "3",
-      status:"0",
-      image:
-        "https://images.caradisiac.com/images/4/3/8/8/204388/S0-les-voitures-neuves-sont-de-plus-en-plus-cheres-et-ce-n-est-pas-une-surprise-770216.jpg",
-      prix: 300000000,
-      marque: "Subaru",
-      time: "il y a 6h",
-    },
-    {
-      id: "4",
-      status:"0",
-      image:
-        "https://images.caradisiac.com/images/4/3/8/8/204388/S0-les-voitures-neuves-sont-de-plus-en-plus-cheres-et-ce-n-est-pas-une-surprise-770216.jpg",
-      prix: 300000000,
-      marque: "Peugeot",
-      time: "il y a 2h",
-    },
-    {
-      id: "5",
-      status:"1",
-      image:
-        "https://images.caradisiac.com/images/4/3/8/8/204388/S0-les-voitures-neuves-sont-de-plus-en-plus-cheres-et-ce-n-est-pas-une-surprise-770216.jpg",
-      prix: 300000000,
-      marque: "GMC",
-      time: "il y a 4h",
-    },
-    {
-      id: "6",
-      status:"1",
-      image:
-        "https://images.caradisiac.com/images/4/3/8/8/204388/S0-les-voitures-neuves-sont-de-plus-en-plus-cheres-et-ce-n-est-pas-une-surprise-770216.jpg",
-      prix: 300000000,
-      marque: "Mercedes",
-      time: "il y a 6h",
-    },
-    {
-      id: "7",
-      status:"0",
-      image:
-        "https://images.caradisiac.com/images/4/3/8/8/204388/S0-les-voitures-neuves-sont-de-plus-en-plus-cheres-et-ce-n-est-pas-une-surprise-770216.jpg",
-      prix: 300000000,
-      marque: "Toyota",
-      time: "il y a 2h",
-    },
-    {
-      id: "8",
-      status:"0",
-      image:
-        "https://images.caradisiac.com/images/4/3/8/8/204388/S0-les-voitures-neuves-sont-de-plus-en-plus-cheres-et-ce-n-est-pas-une-surprise-770216.jpg",
-      prix: 300000000,
-      marque: "Tesla",
-      time: "il y a 4h",
-    },
-    {
-      id: "9",
-      status:"0",
-      image:
-        "https://images.caradisiac.com/images/4/3/8/8/204388/S0-les-voitures-neuves-sont-de-plus-en-plus-cheres-et-ce-n-est-pas-une-surprise-770216.jpg",
-      prix: 300000000,
-      marque: "Suzuki",
-      time: "il y a 6h",
-    },
-    // Add more dummy notifications as needed
-  ];
-
+  const [annonceData, setannonceData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userDataString = await AsyncStorage.getItem("userToken");
+        const userData = JSON.parse(userDataString);
+        const token = userData.token;
+
+        if (token) {
+          const response = await axios.get(`${link}/annonce/findAllAnnonceValide`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setannonceData(response.data.allAnnonces);
+          console.log(JSON.stringify(response.data))
+        } else {
+          console.log("Token not found in AsyncStorage.");
+        }
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      }
+    };
+    fetchData();
+
+    return () => {};
+  }, [annonceData]);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity className="items-start" onPress={() => setModalVisible(true)}>
+    <TouchableOpacity
+      className="items-start"
+      onPress={() => {
+        setSelectedItem(item);
+        setModalVisible(true);
+      }}
+    >
       <View
         style={styles.notificationItem}
         backgroundColor="#323232"
-        className=" flex-row items-start w-full"
+        className=" flex-row items-start "
       >
         <Image
-          source={{ uri: item.image }}
+          source={{ uri: item.detailsAnnonce.urls[0] }}
           style={{ width: 100, height: 100, borderRadius: 8 }}
         />
         <View style={styles.notificationTextContainer}>
@@ -120,13 +72,16 @@ export const ListeAnnonces = () => {
           <Text className="flex-auto w-56 text-slate-200">
             Prix: {item.prix} Ar
           </Text>
-          <Text style={styles.notificationTime}>{item.time}</Text>
-          {item.status==1 && (
-            <Badge status="error" value="Vendu" containerStyle={{ position: 'absolute', bottom: 5, right: 30 }}/>
-          )}
+          <Text style={styles.notificationTime}>{item.date_annonce}</Text>
+          {/* {item.status == 20 && (
+            <Badge
+              status="error"
+              value="Vendu"
+              containerStyle={{ position: "absolute", bottom: 5, right: 20 }}
+            />
+          )} */}
         </View>
       </View>
-      <DetailsAnnonce isVisible={modalVisible} onClose={() => setModalVisible(false)}/>
     </TouchableOpacity>
   );
 
@@ -156,7 +111,7 @@ export const ListeAnnonces = () => {
       <View className="mt-5 ">
         <FlatList
           data={annonceData}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id_annonce}
           renderItem={renderItem}
           refreshControl={
             <RefreshControl
@@ -171,6 +126,16 @@ export const ListeAnnonces = () => {
         />
         <View className="mt-16"></View>
       </View>
+      {selectedItem && (
+        <DetailsAnnonce
+          isVisible={modalVisible}
+          onClose={() => {
+            setSelectedItem(null);
+            setModalVisible(false);  // Set modalVisible to false when the modal is closed
+          }}
+          selectedItem={selectedItem}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -194,7 +159,7 @@ const styles = StyleSheet.create({
   notificationItem: {
     borderRadius: 8,
     padding: 5,
-    width: 330,
+    width: 350,
     marginBottom: 12,
   },
   notificationTextContainer: {

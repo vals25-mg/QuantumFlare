@@ -1,4 +1,5 @@
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   SafeAreaView,
@@ -7,20 +8,56 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import * as Notifications from "expo-notifications";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
+Notifications.setNotificationHandler({
+  handLeNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 export const Profile = ({ navigation }) => {
-  const handleLogout = () => {
-    // Add your logout logic here
-    console.log("Logging out...");
-    navigation.navigate("Login");
-    // You can add additional logic like clearing user data, navigating to login screen, etc.
+  const [userData, setUserData] = useState(null);
+  const [expoPushToken, setExpoPushToken] = useState("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userDataString = await AsyncStorage.getItem("userToken");
+        console.log("userDataString:", userDataString);
+        if (userDataString) {
+          const userData = JSON.parse(userDataString);
+          console.log("userData:", userData);
+          setUserData(userData);
+        }
+      } catch (error) {
+        console.log("Error fetching user data:", error.message);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      // Remove the token from AsyncStorage
+      console.log("logout");
+      await AsyncStorage.removeItem("userToken");
+      const userDataString = await AsyncStorage.getItem("userToken");
+      console.log("userDataString:", userDataString);
+      // Navigate to the login screen
+      navigation.navigate("Login");
+    } catch (error) {
+      console.error("Error logging out:", error.message);
+      // Handle error, if any
+    }
   };
 
   const handleConfidentiality = () => {
-    // Add your confidentiality logic here
     console.log("Viewing confidentiality settings...");
-    // You can navigate to a confidentiality settings screen or show a modal, etc.
   };
 
   return (
@@ -37,22 +74,33 @@ export const Profile = ({ navigation }) => {
         <View style={styles.container2}>
           <View style={styles.rowContainer}>
             <View style={styles.circle}>
-              <Text style={styles.circleText}>V</Text>
+              <Text style={styles.circleText}>
+                {userData && userData.email
+                  ? userData.email.charAt(0).toUpperCase()
+                  : ""}
+              </Text>
             </View>
-            <Text style={styles.text} className="text-xl">Vals</Text>
+            {userData && userData.email && (
+              <Text style={styles.text} className="text-xl">
+                {userData.email}
+              </Text>
+            )}
           </View>
         </View>
 
-
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.parameter}
           onPress={handleConfidentiality}
         >
           <Icon name="lock" size={20} color="#333" />
           <Text style={styles.parameterText}>Confidentialité</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity style={styles.parameter} onPress={handleLogout}>
+        <TouchableOpacity
+          style={styles.parameter}
+          className="mt-10"
+          onPress={handleLogout}
+        >
           <Icon name="exit-to-app" size={20} color="#333" />
           <Text style={styles.parameterText}>Se Deconnecter</Text>
         </TouchableOpacity>
